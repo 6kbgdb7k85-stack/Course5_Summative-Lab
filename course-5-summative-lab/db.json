@@ -19,27 +19,6 @@
       "name": "House Blend",
       "category": "Coffee",
       "price": 12
-    },
-    {
-      "name": "test",
-      "description": "test",
-      "category": "test",
-      "price": "123",
-      "id": "oGHBd3t6TdI"
-    },
-    {
-      "name": "test product",
-      "description": "test desc",
-      "category": "test category",
-      "price": "890",
-      "id": "k4i6tVTXS7E"
-    },
-    {
-      "name": "test product 2",
-      "description": "test desc 2",
-      "category": "test category 2",
-      "price": "890",
-      "id": "UkvzQCkeLTs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

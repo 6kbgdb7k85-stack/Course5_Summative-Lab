@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-export default function useFetch(url, method="GET", onLoad = true) {
+//reduce fetch into a streamlined setup for repeated use
+export default function useFetch(url, method="GET", onLoad = true) {//defaulting method to get and onLoad to true so get requests meant to run on load only need the url provided
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
@@ -23,6 +24,7 @@ export default function useFetch(url, method="GET", onLoad = true) {
       .catch((error) => console.error(error));
   }
 
+  //compile options for fetch based on method and supplied body
   function compileFetchOptions(body) {
     if (method === "GET") {
       return null;
@@ -43,5 +45,5 @@ export default function useFetch(url, method="GET", onLoad = true) {
     }
   }
 
-  return { response, loading, runFetch };
+  return { response, loading, runFetch, setResponse };//returning setResponse for cases where component's useEffect is based on response
 }
