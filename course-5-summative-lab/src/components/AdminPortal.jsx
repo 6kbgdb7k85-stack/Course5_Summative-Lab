@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormField from "../common/components/FormField";
 import { Outlet, useOutletContext } from "react-router-dom";
 import Shop from "./Shop";
 
-export default function AdminPortal() {
-  const { addItem, addItemLoading } = useOutletContext();
-
-  const [products, setProducts] = useState([]);
-
-  const [form, setForm] = useState({
+const initForm = {
     name: "",
     description: "",
     category: "",
     price: 0,
-  });
+  }
+
+export default function AdminPortal() {
+  const { addItem, addItemLoading, addItemResponse } = useOutletContext();
+
+  const [form, setForm] = useState(initForm);
 
   function handleChange({ target: { name, value } }) {
     setForm((prevState) => ({
@@ -34,6 +34,12 @@ export default function AdminPortal() {
       addItem(form);
     }
   }
+
+  useEffect(()=>{
+    if(addItemResponse){
+      setForm(initForm)
+    }
+  },[addItemResponse])
 
   return (
     <>
@@ -72,7 +78,7 @@ export default function AdminPortal() {
         </button>
         {addItemLoading ? <h3>Adding Product...</h3> : <></>}
       </form>
-      <Outlet />
+      <Outlet context={{addItemResponse}} />
     </>
   );
 }

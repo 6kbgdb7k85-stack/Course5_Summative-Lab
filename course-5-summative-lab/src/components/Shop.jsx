@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import useFetch from "../common/utils/useFetch";
 import ProductCard from "./ProductCard";
 import FormField from "../common/components/FormField";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 
 export default function Shop() {
-  
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState(null);
-  const [products,setProducts]=useState([])
+  const [products, setProducts] = useState([]);
 
   const { loading: shopLoading, response: productsResponse } = useFetch(
     "http://localhost:6001/products",
   );
+
+  const { addItemResponse } = useOutletContext() ?? { addItemResponse: null };
 
   const {
     loading: deleteLoading,
@@ -25,25 +26,31 @@ export default function Shop() {
     product.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  useEffect(()=>{
-    if(deleteId){
-        deleteProduct()
+  useEffect(() => {
+    if (deleteId) {
+      deleteProduct();
     }
-  },[deleteId])
+  }, [deleteId]);
 
-  useEffect(()=>{
-    if(productsResponse){
-        setProducts(productsResponse)
+  useEffect(() => {
+    if (productsResponse) {
+      setProducts(productsResponse);
     }
-  },[productsResponse])
+  }, [productsResponse]);
 
-  useEffect(()=>{
-    if(deleteResponse&&deleteId){
-        setProducts(products.filter(product=>product.id!==deleteId))
-        setDeleteId(null)
-        setDeleteResponse(null)
+  useEffect(() => {
+    if (addItemResponse) {
+      setProducts((prevState) => [...prevState, addItemResponse]);
     }
-  },[deleteResponse,deleteId])
+  }, [addItemResponse]);
+
+  useEffect(() => {
+    if (deleteResponse && deleteId) {
+      setProducts(products.filter((product) => product.id !== deleteId));
+      setDeleteId(null);
+      setDeleteResponse(null);
+    }
+  }, [deleteResponse, deleteId]);
 
   return (
     <>
@@ -59,7 +66,12 @@ export default function Shop() {
             value={search}
           />
           {filteredProducts?.map((product) => (
-            <ProductCard key={product.id} product={product} onDelete={setDeleteId} loading={deleteLoading} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onDelete={setDeleteId}
+              loading={deleteLoading}
+            />
           ))}
         </>
       )}
