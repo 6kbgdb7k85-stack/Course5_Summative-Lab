@@ -72,7 +72,7 @@ export default function AdminPortal() {
         </button>
         {addItemLoading ? <h3>Adding Product...</h3> : <></>}
       </form>
-      <Outlet context={{ products, setProducts }} />
+      <Outlet />
     </>
   );
 }

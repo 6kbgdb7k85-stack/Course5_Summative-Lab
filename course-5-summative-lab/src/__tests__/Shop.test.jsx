@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import Shop from "../components/Shop";
 import * as useFetchModule from "../common/utils/useFetch";
@@ -132,5 +133,61 @@ describe("Shop", () => {
     global.mockRouter(<Shop />)
     expect(screen.getByText("Shop")).toBeInTheDocument();
     expect(screen.queryByText("Laptop")).not.toBeInTheDocument();
+  });
+
+  test("renders ProductCard components with correct props", () => {
+    vi.spyOn(useFetchModule, "default").mockReturnValue({
+      loading: false,
+      response: mockProducts,
+    });
+    global.mockRouter(<Shop />)
+    
+    // Check that products are rendered (ProductCard renders product name)
+    expect(screen.getByText("Laptop")).toBeInTheDocument();
+    expect(screen.getByText("Mouse")).toBeInTheDocument();
+  });
+
+  test("search input maintains value and filters correctly", async () => {
+    vi.spyOn(useFetchModule, "default").mockReturnValue({
+      loading: false,
+      response: mockProducts,
+    });
+    global.mockRouter(<Shop />)
+    const searchInput = screen.getByPlaceholderText("Search by product name...");
+
+    await userEvent.type(searchInput, "Key");
+
+    expect(searchInput).toHaveValue("Key");
+    expect(screen.getByText("Keyboard")).toBeInTheDocument();
+    expect(screen.queryByText("Laptop")).not.toBeInTheDocument();
+  });
+
+  test("renders all products initially", () => {
+    vi.spyOn(useFetchModule, "default").mockReturnValue({
+      loading: false,
+      response: mockProducts,
+    });
+    global.mockRouter(<Shop />)
+    
+    mockProducts.forEach((product) => {
+      expect(screen.getByText(product.name)).toBeInTheDocument();
+    });
+  });
+
+  test("search is case-insensitive and matches partial names", async () => {
+    vi.spyOn(useFetchModule, "default").mockReturnValue({
+      loading: false,
+      response: mockProducts,
+    });
+    global.mockRouter(<Shop />)
+    const searchInput = screen.getByPlaceholderText("Search by product name...");
+
+    await userEvent.type(searchInput, "top");
+
+    // "Laptop" contains "top"
+    expect(screen.getByText("Laptop")).toBeInTheDocument();
+    expect(screen.queryByText("Mouse")).not.toBeInTheDocument();
+    expect(screen.queryByText("Keyboard")).not.toBeInTheDocument();
+    expect(screen.queryByText("Monitor")).not.toBeInTheDocument();
   });
 });

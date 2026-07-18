@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function ProductCard({product}){
+export default function ProductCard({product,onDelete, loading}){
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -12,7 +12,7 @@ export default function ProductCard({product}){
             <h6>{product.category}</h6>
             <p>{product.description}</p>
             <p>${product.price}</p>
-            {location.pathname.includes('admin')?(<><button onClick={()=>navigate(`/admin/${product.id}`,{state:{product}})}>Edit</button>|<button>Delete</button></>):<></>}
+            {location.pathname.includes('admin')?(<><button onClick={()=>navigate(`/admin/${product.id}`,{state:{product}})}>Edit</button>|<button disabled={loading} onClick={()=>onDelete(product.id)}>Delete</button></>):<></>}
         </div>
     )
 }
