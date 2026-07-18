@@ -17,7 +17,9 @@ global.mockRouter = (element) => {
     },
   );
 
-  render(<RouterProvider router={router} />);
+  render(<RouterProvider router={router}>
+    {element}
+  </RouterProvider>);
 
   return { router };
 };

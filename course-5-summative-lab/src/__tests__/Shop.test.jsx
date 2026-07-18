@@ -21,7 +21,7 @@ describe("Shop", () => {
       loading: false,
       response: [],
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     expect(screen.getByText("Shop")).toBeInTheDocument();
   });
 
@@ -30,7 +30,7 @@ describe("Shop", () => {
       loading: true,
       response: null,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
@@ -39,7 +39,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     expect(screen.getByText("Laptop")).toBeInTheDocument();
     expect(screen.getByText("Mouse")).toBeInTheDocument();
     expect(screen.getByText("Keyboard")).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     const searchInput = screen.getByPlaceholderText(
       "Search by product name..."
     );
@@ -63,7 +63,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     const searchInput = screen.getByPlaceholderText(
       "Search by product name..."
     );
@@ -80,7 +80,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     const searchInput = screen.getByPlaceholderText(
       "Search by product name..."
     );
@@ -95,7 +95,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     const searchInput = screen.getByPlaceholderText(
       "Search by product name..."
     );
@@ -111,7 +111,7 @@ describe("Shop", () => {
       loading: false,
       response: mockProducts,
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     const searchInput = screen.getByPlaceholderText(
       "Search by product name..."
     );
@@ -129,7 +129,7 @@ describe("Shop", () => {
       loading: false,
       response: [],
     });
-    render(<Shop />);
+    global.mockRouter(<Shop />)
     expect(screen.getByText("Shop")).toBeInTheDocument();
     expect(screen.queryByText("Laptop")).not.toBeInTheDocument();
   });

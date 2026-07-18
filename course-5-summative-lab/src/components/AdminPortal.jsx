@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import FormField from "../common/components/FormField";
-import { useOutletContext } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
+import Shop from "./Shop";
 
 export default function AdminPortal() {
   const { addItem, addItemLoading } = useOutletContext();
+
+  const [products, setProducts] = useState([]);
+
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -20,7 +24,7 @@ export default function AdminPortal() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isValid = true;
+    let isValid = true;
     Object.keys(form).forEach((key) => {
       if (!form[key]) {
         isValid = false;
@@ -68,6 +72,7 @@ export default function AdminPortal() {
         </button>
         {addItemLoading ? <h3>Adding Product...</h3> : <></>}
       </form>
+      <Outlet context={{ products, setProducts }} />
     </>
   );
 }
