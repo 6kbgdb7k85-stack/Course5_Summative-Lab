@@ -1,6 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import AdminPortal from "../components/AdminPortal";
+import { vi } from "vitest";
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useOutletContext: () => ({ addItem: vi.fn(), addItemLoading: false }),
+  };
+});
 
 describe("AdminPortal", () => {
   beforeEach(() => {
@@ -19,7 +28,9 @@ describe("AdminPortal", () => {
     const categoryField = screen.getByLabelText("Category");
     const priceField = screen.getByLabelText("Price");
     fireEvent.change(nameField, { target: { value: "testName" } });
-    fireEvent.change(descriptionField, { target: { value: "testDescription" } });
+    fireEvent.change(descriptionField, {
+      target: { value: "testDescription" },
+    });
     fireEvent.change(categoryField, { target: { value: "testCategory" } });
     fireEvent.change(priceField, { target: { value: "123" } });
     expect(nameField.value).toBe("testName");
