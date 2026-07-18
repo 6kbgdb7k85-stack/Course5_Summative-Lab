@@ -13,7 +13,7 @@ export default function MainLayout() {
       <header>
         <NavBar/>
       </header>
-      <Outlet context={{addItem, addItemLoading}} />
+      <Outlet context={{addItem, addItemLoading, addItemResponse}} />
     </>
   );
 }
