@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useFetch from "../common/utils/useFetch";
 import ProductCard from "./ProductCard";
 import FormField from "../common/components/FormField";
+import { useLocation } from "react-router-dom";
 
 export default function Shop() {
   const { loading: shopLoading, response: products } = useFetch(
@@ -14,7 +15,7 @@ export default function Shop() {
 
   return (
     <>
-      <h2>Shop</h2>
+      {!location.pathname.includes('admin')?<h2>Shop</h2>:<></>}
       {shopLoading ? (
         <h4>Loading...</h4>
       ) : (

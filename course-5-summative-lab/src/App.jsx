@@ -8,6 +8,7 @@ import MainLayout from "./components/MainLayout";
 import AdminPortal from "./components/AdminPortal";
 import Shop from "./components/Shop";
 import Home from "./components/Home";
+import EditProduct from "./components/EditProduct";
 
 function App() {
 
@@ -17,7 +18,10 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route path="" element={<Home/>}/>
           <Route path="/shop" element={<Shop/>}/>
-          <Route path="/admin" element={<AdminPortal/>}/>
+          <Route path="/admin" element={<AdminPortal/>}>
+            <Route path="" element={<Shop/>}/>
+            <Route path=":id" element={<EditProduct/>}/>
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
