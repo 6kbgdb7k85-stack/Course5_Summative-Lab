@@ -17,6 +17,16 @@
   }
 }
 
+nav a {
+  background-color: aquamarine;
+  color: black;
+}
+
+nav a.active {
+  background-color: blueviolet;
+  color: white;
+}
+
 .hero {
   position: relative;
 

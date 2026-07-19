@@ -1,84 +1,38 @@
 import React, { useEffect, useState } from "react";
 import FormField from "../common/components/FormField";
-import { Outlet, useOutletContext } from "react-router-dom";
+import { Outlet, useOutletContext, useParams } from "react-router-dom";
 import Shop from "./Shop";
-
-const initForm = {
-    name: "",
-    description: "",
-    category: "",
-    price: 0,
-  }
+import useFetch from "../common/utils/useFetch";
 
 export default function AdminPortal() {
-  const { addItem, addItemLoading, addItemResponse } = useOutletContext();
+  const { id } = useParams();
+  const {
+    loading: addProductLoading,
+    response: addProductResponse,
+    runFetch: runAddProduct,
+    setResponse: setAddProductResponse
+  } = useFetch("http://localhost:6001/products", "POST", false);
+  const {
+    loading: editProductLoading,
+    response: editProductResponse,
+    runFetch: runEditProduct,
+    setResponse: setEditProductResponse
+  } = useFetch(`http://localhost:6001/products/${id}`, "PATCH", false);
 
-  const [form, setForm] = useState(initForm);
+  const loading = addProductLoading || editProductLoading;
 
-  function handleChange({ target: { name, value } }) {
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    let isValid = true;
-    Object.keys(form).forEach((key) => {
-      if (!form[key]) {
-        isValid = false;
-      }
-    });
-    if (isValid) {
-      addItem(form);
+  //run fetch for add or edit product based on whether user is editing or adding a product
+  function addEditItem(item) {
+    if (id) {
+      runEditProduct(item);
+    } else {
+      runAddProduct(item);
     }
   }
-
-  useEffect(()=>{
-    if(addItemResponse){
-      setForm(initForm)
-    }
-  },[addItemResponse])
 
   return (
     <>
-      <h2>Add Product</h2>
-      <form onSubmit={handleSubmit}>
-        <FormField
-          label="Name"
-          name="name"
-          value={form}
-          type="text"
-          onChange={handleChange}
-        />
-        <FormField
-          label="Description"
-          name="description"
-          value={form}
-          type="text"
-          onChange={handleChange}
-        />
-        <FormField
-          label="Category"
-          name="category"
-          value={form}
-          type="text"
-          onChange={handleChange}
-        />
-        <FormField
-          label="Price"
-          name="price"
-          value={form}
-          type="number"
-          onChange={handleChange}
-        />
-        <button disabled={addItemLoading} type="submit">
-          Submit
-        </button>
-        {addItemLoading ? <h3>Adding Product...</h3> : <></>}
-      </form>
-      <Outlet context={{addItemResponse}} />
+      <Outlet context={{ addProductResponse, addEditItem, loading, editProductResponse, setAddProductResponse, setEditProductResponse }} />
     </>
   );
 }

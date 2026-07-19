@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 
-//reduce fetch into a streamlined setup for repeated use
-export default function useFetch(url, method="GET", onLoad = true) {//defaulting method to get and onLoad to true so get requests meant to run on load only need the url provided
+/**
+ * @param {string} url
+ * @param {"GET"||"POST"||"PATCH"||"DELETE"} method
+ * @param {boolean} onLoad
+ * @returns {Object,boolean,function,function}
+ */
+
+//simplify fetch into a streamlined setup for repeated use
+//defaulting method to GET and onLoad to true so GET requests meant to run on load only need the url provided
+export default function useFetch(url, method = "GET", onLoad = true) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
@@ -45,5 +53,5 @@ export default function useFetch(url, method="GET", onLoad = true) {//defaulting
     }
   }
 
-  return { response, loading, runFetch, setResponse };//returning setResponse for cases where component's useEffect is based on response
+  return { response, loading, runFetch, setResponse }; //returning setResponse for cases where component's useEffect is based on response
 }

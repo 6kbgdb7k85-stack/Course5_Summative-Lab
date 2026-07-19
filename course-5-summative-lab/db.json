@@ -1,10 +1,4 @@
 {
-  "store_info": {
-    "id": 1,
-    "name": "Coffee R Us",
-    "description": "The go to store for coffee",
-    "phone_number": "555-5555"
-  },
   "products": [
     {
       "id": "1",
@@ -25,7 +19,7 @@
       "description": "test",
       "category": "test",
       "price": "123",
-      "id": "hTkcdhuqaRc"
+      "id": "qBWQoPQNAI4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

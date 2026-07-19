@@ -8,18 +8,22 @@ import {
   useParams,
 } from "react-router-dom";
 
-export default function EditProduct() {
+const initForm = {
+  name: "",
+  description: "",
+  category: "",
+  price: 0,
+};
+
+export default function AddEditProduct() {
   const { id } = useParams();
   const location = useLocation();
-  const { product } = location.state;
+  const { product } = location?.state || { product: null };
 
-  const { loading, response, runFetch } = useFetch(
-    `http://localhost:6001/products/${id}`,
-    "PATCH",
-    false,
-  );
+  const { loading, editProductResponse, addEditItem, addProductResponse, setAddProductResponse, setEditProductResponse } =
+    useOutletContext();
 
-  const [form, setForm] = useState(product);
+  const [form, setForm] = useState(product||initForm);
 
   const navigate = useNavigate();
 
@@ -31,27 +35,37 @@ export default function EditProduct() {
   }
 
   function handleSubmit(e) {
-      e.preventDefault();
-      let isValid = true;
-      Object.keys(form).forEach((key) => {
-        if (!form[key]) {
-          isValid = false;
-        }
-      });
-      if (isValid) {
-        runFetch(form);
+    e.preventDefault();
+    let isValid = true;
+    Object.keys(form).forEach((key) => {
+      if (!form[key]) {
+        isValid = false;
       }
+    });
+    if (isValid) {
+      addEditItem(form);
     }
+  }
 
-    useEffect(() => {
-      if (response) {
-        navigate("/admin");
-      }
-    }, [response]);
+  //addProductResponse and editProductResponse set to null in their respective useEffect blocks to prevent them overriding each other's effects
+  useEffect(() => {
+    if (addProductResponse) {
+      setForm(initForm);
+      setAddProductResponse(null)
+    }
+  }, [addProductResponse]);
+
+  useEffect(() => {
+    if (editProductResponse) {
+      setEditProductResponse(null)
+      navigate("/admin");
+    }
+  }, [editProductResponse]);
 
   return (
     <>
-      <h2>Edit Product</h2>
+      {/*change header to reflect add or edit*/}
+      {id ? <h2>Edit Product</h2> : <h2>Add Product</h2>}
       <form onSubmit={handleSubmit}>
         <FormField
           label="Name"
@@ -84,6 +98,8 @@ export default function EditProduct() {
         <button disabled={loading} type="submit">
           Submit
         </button>
+        {/*if edit mode allow user to return to list without making changes*/}
+        {id?<button onClick={()=>navigate('/admin')}>Cancel</button>:<></>}
         {loading ? <h3>Saving Product...</h3> : <></>}
       </form>
     </>

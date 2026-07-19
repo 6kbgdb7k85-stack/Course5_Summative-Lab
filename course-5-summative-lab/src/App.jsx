@@ -8,7 +8,7 @@ import MainLayout from "./components/MainLayout";
 import AdminPortal from "./components/AdminPortal";
 import Shop from "./components/Shop";
 import Home from "./components/Home";
-import EditProduct from "./components/EditProduct";
+import AddEditProduct from "./components/AddEditProduct";
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
           <Route path="/shop" element={<Shop/>}/>
           <Route path="/admin" element={<AdminPortal/>}>
             <Route path="" element={<Shop/>}/>
-            <Route path=":id" element={<EditProduct/>}/>
+            <Route path=":id" element={<AddEditProduct/>}/>
           </Route>
         </Route>
       </Routes>
