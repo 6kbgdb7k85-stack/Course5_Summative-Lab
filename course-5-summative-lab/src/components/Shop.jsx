@@ -3,6 +3,7 @@ import useFetch from "../common/utils/useFetch";
 import ProductCard from "./ProductCard";
 import FormField from "../common/components/FormField";
 import { useLocation, useOutletContext } from "react-router-dom";
+import AddEditProduct from "./AddEditProduct";
 
 export default function Shop() {
   const [search, setSearch] = useState("");
@@ -13,7 +14,10 @@ export default function Shop() {
     "http://localhost:6001/products",
   );
 
-  const { addItemResponse } = useOutletContext() ?? { addItemResponse: null };
+  // set addProductResponse to outletContext or null if used outside the AdminPortal context
+  const { addProductResponse } = useOutletContext() ?? {
+    addProductResponse: null,
+  };
 
   const {
     loading: deleteLoading,
@@ -39,11 +43,12 @@ export default function Shop() {
   }, [productsResponse]);
 
   useEffect(() => {
-    if (addItemResponse) {
-      setProducts((prevState) => [...prevState, addItemResponse]);
+    if (addProductResponse) {
+      setProducts((prevState) => [...prevState, addProductResponse]);
     }
-  }, [addItemResponse]);
+  }, [addProductResponse]);
 
+  //reset deleteResponse and deleteId to prevent delete method being called accidentally
   useEffect(() => {
     if (deleteResponse && deleteId) {
       setProducts(products.filter((product) => product.id !== deleteId));
@@ -54,7 +59,12 @@ export default function Shop() {
 
   return (
     <>
-      {!location.pathname.includes("admin") ? <h2>Shop</h2> : <></>}
+      {/* change header based on admin status */}
+      {!location.pathname.includes("admin") ? (
+        <h2>Shop</h2>
+      ) : (
+        <AddEditProduct />
+      )}
       {shopLoading ? (
         <h4>Loading...</h4>
       ) : (

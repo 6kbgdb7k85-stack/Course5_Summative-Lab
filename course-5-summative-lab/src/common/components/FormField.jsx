@@ -1,5 +1,7 @@
 import React, { useId } from "react";
 
+
+//combine label/input combo into a single reusable component for easy use
 export default function FormField({ name, value, onChange, type, label }) {
   const fieldId = useId();
 
